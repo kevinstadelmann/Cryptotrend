@@ -4,6 +4,7 @@ Leave one blank line.  The rest of this docstring should contain an
 overall description of the module or program.  Optionally, it may also
 contain a brief description of exported classes and functions and/or usage
 examples.
+https://mariadb.com/resources/blog/how-to-connect-python-programs-to-mariadb/
 
   Typical usage example:
 
@@ -18,10 +19,11 @@ import sys
 try:
     conn = mariadb.connect(
         user="cryptotrend",
-        password="",
-        host="",
+        password="cryptotrend123_!",
+        host="80.74.151.100",
         port=3306,
-        database="cryptotrend"
+        database="cryptotrend",
+        autocommit=True         #automatically commits SQL statements
 
     )
 except mariadb.Error as e:
@@ -38,4 +40,7 @@ cur.execute(
 for line in cur:
     print(line)
 
-cur.execute("INSERT INTO test VALUES (10)")
+try:
+    cur.execute("INSERT INTO cryptotrend.test VALUES (10)")
+except mariadb.Error as e:
+    print(f"Error: {e}")

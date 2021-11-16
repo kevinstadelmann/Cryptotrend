@@ -10,10 +10,3 @@ examples.
   foo = ClassFoo()
   bar = foo.FunctionBar()
 """
-
-if __name__ == '__main__':
-    print("### extract PHASE ###")
-    print("### LOAD PHASE ###")
-    print("### transform PHASE ###")
-
-
