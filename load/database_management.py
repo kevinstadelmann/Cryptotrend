@@ -18,9 +18,9 @@ import sys
 # Connect to MariaDB
 try:
     conn = mariadb.connect(
-        user="cryptotrend",
-        password="cryptotrend123_!",
-        host="80.74.151.100",
+        user="",
+        password="",
+        host="",
         port=3306,
         database="cryptotrend",
         autocommit=True         #automatically commits SQL statements
