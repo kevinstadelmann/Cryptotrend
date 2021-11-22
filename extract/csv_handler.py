@@ -1,9 +1,6 @@
-"""A one line summary of the module or program, terminated by a period.
+"""CSV handler for extracted Twitter data
 
-Leave one blank line.  The rest of this docstring should contain an
-overall description of the module or program.  Optionally, it may also
-contain a brief description of exported classes and functions and/or usage
-examples.
+Contains the ETL steps for the...
 
   Typical usage example:
 
@@ -13,63 +10,56 @@ examples.
 
 import pandas as pd
 from datetime import datetime
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 ### EXTRACT ###
-df_btc = pd.read_csv('../data/twitter_bitcoin.csv')
+df_btc = pd.read_csv('../data/twitter_bitcoin.csv', header=None)
 
-### TRANSFORM ##
+### TRANSFORM ###
 
 # add column name
-df_btc.columns = ['day', 'count']
+df_btc.columns = ['date', 'count']
 
-# remove counts which are not numeric
-# https://newbedev.com/finding-non-numeric-rows-in-dataframe-in-pandas
-# 1. Try to convert to numeric, if not, make nan-value
-print(len(df_btc))
-a = pd.to_numeric(df_btc['count'], errors='coerce')
-idx = a.isna()
-print(idx==True)
-#print(df_btc[idx])
-# 2. remove all nan-values
-#df_btc.drop(df_btc[idx])
-print(len(df_btc))
+# remove counts which are not numeric and dates which are not dates
+# 1. Try to convert to numeric/date, if not possible, make nan-value
+df_btc['count'] = pd.to_numeric(df_btc['count'], errors='coerce')
+df_btc['date'] = pd.to_datetime(df_btc['date'], format='%d/%m/%Y', errors='coerce')
 
+# 2. drop nan-values
+df_btc = df_btc.dropna()
 
-#print(df_btc['count'].applymap(lambda x: isinstance(x, (int, float))))
-
-# remove duplicate
-#df_concat.drop_duplicates('name')
+# remove duplicates
+df_btc = df_btc.drop_duplicates()
 
 # date is wrong, months need to increase by one
 for i,row in df_btc.iterrows():
+    df_btc.at[i, 'date'] = df_btc.at[i, 'date'] + relativedelta(months=1)
 
-    var_date = str(row['day'])
+# sort dataframe by date
+df_btc = df_btc.sort_values(by="date")
 
-    if var_date.count('/') == 2:
-        #print(var_date)
-        new_var_date = str(var_date.split('/', 2)[0] + "/" + str(int(var_date.split('/', 2)[1]) + 1) + "/" + var_date.split('/', 2)[2])
-        df_btc.at[i,'day'] = new_var_date
+# reset index
+df_btc.reset_index(drop=True, inplace=True)
 
 # add percentual change from count-values on a daily basis
+# skip first row, because there is no value to compare
+for i,row in df_btc[1:].iterrows():
 
-#for i,row in range(df_btc.iterrows():
+    dt_day1 = df_btc.loc[i, 'date']
+    dt_day2 = df_btc.loc[i - 1, 'date']
 
-    #if i > 1 and str(row['count'][i]).isnumeric() == True and str(row['count'][i-1]).isnumeric() == True:
-    #    var_count1 = int(row['count'][i])
-    #    var_count2 = int(row['count'][i-1])
-    #    var_change = var_count2 // var_count1
-    #    print(type(var_count2))
+    # exclude rows which are not successively with their date
+    if dt_day1 + timedelta(days=-1) == dt_day2:
+        var_count1 = df_btc.loc[i, 'count']
+        var_count2 = df_btc.loc[i-1, 'count']
+        df_btc.at[i,'percent_change'] = (var_count1 / var_count2)-1
 
-# remove duplicate
-#df_concat.drop_duplicates('name')
 # add column asset / source / created_ts
-#df_btc['asset'] = "BTC"
-#df_btc['source'] = "Twitter"
-#df_btc['created_ts'] = datetime.now(tz=None)
+df_btc['asset'] = "BTC"
+df_btc['source'] = "Twitter"
+df_btc['created_ts'] = datetime.now(tz=None)
 
-
-
-
-#print(df_btc.dtypes)
+print(df_btc[['date','count','percent_change']])
 
 ### LOAD ###
