@@ -18,11 +18,11 @@ import sys
 # Connect to MariaDB
 try:
     conn = mariadb.connect(
-        user="",
-        password="",
-        host="",
+        user="root",
+        password="123",
+        host="127.0.0.1",
         port=3306,
-        database="cryptotrend",
+        database="test",
         autocommit=True         #automatically commits SQL statements
 
     )
@@ -40,7 +40,4 @@ cur.execute(
 for line in cur:
     print(line)
 
-try:
-    cur.execute("INSERT INTO cryptotrend.test VALUES (10)")
-except mariadb.Error as e:
-    print(f"Error: {e}")
+

@@ -10,9 +10,12 @@ examples.
   foo = ClassFoo()
   bar = foo.FunctionBar()
 """
+import csv_handler
+import scraper_
 
 if __name__ == '__main__':
     print("### extract PHASE ###")
+    gather_coingecko("bitcoin", 01-01-2021)
     print("### LOAD PHASE ###")
     print("### transform PHASE ###")
 

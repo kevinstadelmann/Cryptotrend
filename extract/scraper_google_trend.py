@@ -10,3 +10,4 @@ examples.
   foo = ClassFoo()
   bar = foo.FunctionBar()
 """
+
