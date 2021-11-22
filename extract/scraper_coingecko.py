@@ -69,7 +69,7 @@ def scrap_coingecko(coin_name,end_date,start_date):
     print(data_crypto.dtypes)
     print(data_crypto.shape)
     print('Done!')
-    print('Bye bye...')
+    print('Bye bye')
     return data_crypto
 
 
