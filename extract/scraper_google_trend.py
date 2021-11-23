@@ -138,4 +138,4 @@ fig.show()
 # this method will return historical data of the searched keyword from Google Trend
 # according to the timeframe you have specified
 # we can visualize the data collected by using the Plotly library
-###
+##
