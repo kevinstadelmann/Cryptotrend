@@ -31,3 +31,6 @@ def from_name_to_web_ref(popular_coin=True):
                 dict_name[name1] = web_ref
                 dict_name[name2] = web_ref
         return dict_name
+
+dict_dict=from_name_to_web_ref()
+print(dict_dict)
