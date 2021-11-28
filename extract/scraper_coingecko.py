@@ -1,43 +1,33 @@
-"""A one line summary of the module or program, terminated by a period.
+"""Scrap Data about cryptocurrencies from coingecko.com.
 
-Leave one blank line.  The rest of this docstring should contain an
-overall description of the module or program.  Optionally, it may also
-contain a brief description of exported classes and functions and/or usage
-examples.
+This function take as input:
+    - coin_name: The name of the cryptocurrency you want to analyze
+    - start_date: The starting date of the period you want to analyze
+    - end_date: The ending date of the period you want to analyze
 
-  Typical usage example:
-
-  foo = ClassFoo()
-  bar = foo.FunctionBar()
+The program goes first on the main page where it scraps all the name of the cryptocurrencies,
+and store the name in a dictionary with the webpage reference. So when the user input coin_name,
+the program check if this name exist on the webpage and then use its web reference to access historical data.
+The output is a clean dataframe exported as a CSV-file.
 """
+
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-pd.options.display.float_format = '{:.2f}'.format
 import matplotlib.pyplot as plt
+from function_scraper import from_name_to_web_ref
+pd.options.display.float_format = '{:.2f}'.format
 
 coin_name='Bitcoin'
 start_date='2018-01-01'
 end_date='2021-01-01'
 
 def scrap_coingecko(coin_name,end_date,start_date):
-    #--------------------------------------------------------Create a function for this part---------------------------
-    website = 'https://www.coingecko.com/en'
-    response1 = requests.get(website)
-    print(response1.status_code)
-    soup1 = BeautifulSoup(response1.content, 'html.parser')
-    web_table = soup1.find('table', {'class': 'table-scrollable'}).find('tbody').find_all('tr')
-    dict_name = {}
-    for row in web_table:
-        name = row.find('a', {
-            'class': 'tw-hidden lg:tw-flex font-bold tw-items-center tw-justify-between'}).get_text().strip('\n')
-        web_ref = row.find('a', {'class': 'tw-hidden lg:tw-flex font-bold tw-items-center tw-justify-between'}).get(
-            'href')
-        dict_name[name] = web_ref
-    #------------------------------------------------------------------------------------------------------------------
+    name_webref=from_name_to_web_ref()
+    #print(name_webref)
     names, dates, market_cap, volume, open_, close = [],[],[],[],[],[]
     website_historical = 'https://www.coingecko.com{}/historical_data/usd?end_date={}&start_date={}#panel'
-    coin_ref=dict_name[coin_name]
+    coin_ref=name_webref[coin_name]
     response = requests.get(website_historical.format(coin_ref, end_date, start_date))
     print(response.status_code)
     soup = BeautifulSoup(response.content, 'html.parser')

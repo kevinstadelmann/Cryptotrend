@@ -25,7 +25,7 @@ pytrends = TrendReq(hl= 'en-US', tz=360)
 
 # Build Payload
 
-kw_list = ["bit coin", "Bitcoin", "BTC", "Ethium", 'ETH', 'Dogecoin', 'Doge',
+kw_list = ["bit coin", "Bitcoin", "BTC", "Etherium", 'ETH', 'Dogecoin', 'Doge',
            'Doge coin']  # list of keywords to get data
 
 keywords = []  ## a list is created with a for loop as google trends has a max limit # of 5 keywords
