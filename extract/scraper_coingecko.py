@@ -59,7 +59,7 @@ def scrap_coingecko(coin_name,end_date,start_date):
     df = pd.DataFrame(data)
     df['Date'] = pd.to_datetime(df['Date'])
     data_crypto = df.set_index('Date')
-    data_crypto.to_csv(r'/home/student/Cloud/Owncloud/SyncVM (S2)/cryptotrendanalyzer/extract/CoinGecko_Scrap.csv')
+    data_crypto.to_csv(r'/home/student/Cloud/Owncloud/SyncVM (S2)/cryptotrendanalyzer/data/CoinGecko_Scrap.csv')
     print(data_crypto.head())
     print(data_crypto.dtypes)
     print(data_crypto.shape)
