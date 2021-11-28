@@ -18,6 +18,11 @@ import matplotlib.pyplot as plt
 from function_scraper import from_name_to_web_ref
 pd.options.display.float_format = '{:.2f}'.format
 
+HEADERS = ({'User-Agent':
+                'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
+                (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36', \
+            'Accept-Language': 'en-US, en;q=0.5'})
+
 coin_name='Bitcoin'
 start_date='2018-01-01'
 end_date='2021-01-01'
@@ -26,9 +31,9 @@ def scrap_coingecko(coin_name,end_date,start_date):
     name_webref=from_name_to_web_ref()
     #print(name_webref)
     names, dates, market_cap, volume, open_, close = [],[],[],[],[],[]
-    website_historical = 'https://www.coingecko.com{}/historical_data/usd?end_date={}&start_date={}#panel'
     coin_ref=name_webref[coin_name]
-    response = requests.get(website_historical.format(coin_ref, end_date, start_date))
+    URL_HIST = 'https://www.coingecko.com{}/historical_data/usd?end_date={}&start_date={}#panel'
+    response = requests.get(URL_HIST.format(coin_ref, end_date, start_date),headers=HEADERS)
     print(response.status_code)
     soup = BeautifulSoup(response.content, 'html.parser')
     results = soup.find('table', {'class': 'table-striped'}).find('tbody').find_all('tr')
@@ -54,7 +59,7 @@ def scrap_coingecko(coin_name,end_date,start_date):
     df = pd.DataFrame(data)
     df['Date'] = pd.to_datetime(df['Date'])
     data_crypto = df.set_index('Date')
-    data_crypto.to_csv(r'C:\Users\natr\Desktop\HSLU_S2\CIP\project\CoinGecko_Scrap.csv')
+    data_crypto.to_csv(r'/home/student/Cloud/Owncloud/SyncVM (S2)/cryptotrendanalyzer/extract/CoinGecko_Scrap.csv')
     print(data_crypto.head())
     print(data_crypto.dtypes)
     print(data_crypto.shape)

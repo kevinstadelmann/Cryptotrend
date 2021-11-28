@@ -1,9 +1,14 @@
 from bs4 import BeautifulSoup
 import requests
 
+HEADERS = ({'User-Agent':
+                'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
+                (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36', \
+            'Accept-Language': 'en-US, en;q=0.5'})
+
 def from_name_to_web_ref(popular_coin=True):
-    website = 'https://www.coingecko.com/en'
-    response = requests.get(website)
+    URL = 'https://www.coingecko.com/en'
+    response = requests.get(URL,headers=HEADERS)
     print(response.status_code)
     soup = BeautifulSoup(response.content, 'html.parser')
     web_nav = soup.find('nav', {'class': 'pagy-bootstrap-nav'}).find('ul').find_all('li', {'class': 'page-item'})
