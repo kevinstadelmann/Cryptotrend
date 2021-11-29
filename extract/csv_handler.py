@@ -1,11 +1,7 @@
 """CSV handler for extracted Twitter data
 
-Contains the ETL steps for the...
+Extracts data out of csv file, transforms it ... blabla
 
-  Typical usage example:
-
-  foo = ClassFoo()
-  bar = foo.FunctionBar()
 """
 
 import pandas as pd
@@ -14,7 +10,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 ### EXTRACT ###
-df_btc = pd.read_csv('../data/twitter_bitcoin.csv', header=None)
+df_btc = pd.read_csv('../data/twitter_bitcoin_src.csv', header=None)
 
 ### TRANSFORM ###
 
@@ -24,7 +20,7 @@ df_btc.columns = ['date', 'count']
 # remove counts which are not numeric and dates which are not dates
 # 1. Try to convert to numeric/date, if not possible, make nan-value
 df_btc['count'] = pd.to_numeric(df_btc['count'], errors='coerce')
-df_btc['date'] = pd.to_datetime(df_btc['date'], format='%d/%m/%Y', errors='coerce')
+df_btc['date'] = pd.to_datetime(df_btc['date'], format='%d/%m/%Y', errors='coerce').dt.date
 
 # 2. drop nan-values
 df_btc = df_btc.dropna()
@@ -61,5 +57,8 @@ df_btc['source'] = "Twitter"
 df_btc['created_ts'] = datetime.now(tz=None)
 
 print(df_btc[['date','count','percent_change']])
+
+# save cleaned file
+df_btc.to_csv('../data/twitter_bitcoin_stage.csv', index=False)
 
 ### LOAD ###

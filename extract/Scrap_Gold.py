@@ -64,7 +64,7 @@ for line in Hist_table.find_all('tbody'):
                     'Adjusted Close': adjclose, 'Volume': volume_t}
     df = pd.DataFrame(data)
     print(df)
-    df.to_csv(r'/home/student/Cloud/Owncloud/SyncVM (S2)/cryptotrendanalyzer/data/YahFin_Gold.csv')
+    df.to_csv('../data/yahoofinance_gold_srv.csv', index=False)
     #saving_csv = r'YahFin_crypto_{}.csv'
     #df.to_csv(saving_csv.format(symbol))
 

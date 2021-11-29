@@ -5,7 +5,7 @@ overall description of the module or program.  Optionally, it may also
 contain a brief description of exported classes and functions and/or usage
 examples.
 https://mariadb.com/resources/blog/how-to-connect-python-programs-to-mariadb/
-
+https://datatofish.com/pandas-dataframe-to-sql/
   Typical usage example:
 
   foo = ClassFoo()
