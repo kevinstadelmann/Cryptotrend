@@ -110,5 +110,3 @@ print(finalAverageList)
 #    for row in finalAverageList:
 #        write.writerow(row)
 
-
-### LOAD ###

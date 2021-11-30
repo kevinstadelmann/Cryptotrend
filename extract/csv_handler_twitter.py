@@ -10,7 +10,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 ### EXTRACT ###
-df_btc = pd.read_csv('../data/twitter_bitcoin_src.csv', header=None)
+df_btc = pd.read_csv('../data/src/twitter_bitcoin_src.csv', header=None)
 
 ### TRANSFORM ###
 
@@ -56,9 +56,5 @@ df_btc['asset'] = "BTC"
 df_btc['source'] = "Twitter"
 df_btc['created_ts'] = datetime.now(tz=None)
 
-print(df_btc[['date','count','percent_change']])
-
 # save cleaned file
-df_btc.to_csv('../data/twitter_bitcoin_stage.csv', index=False)
-
-### LOAD ###
+df_btc.to_csv('../data/stage/twitter_bitcoin_stage.csv', index=False)

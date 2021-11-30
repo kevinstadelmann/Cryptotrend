@@ -18,6 +18,9 @@ import matplotlib.pyplot as plt
 from function_scraper import from_name_to_web_ref
 pd.options.display.float_format = '{:.2f}'.format
 
+
+### EXTRACT ###
+
 HEADERS = ({'User-Agent':
                 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
                 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36', \
@@ -59,7 +62,8 @@ def scrap_coingecko(coin_name,end_date,start_date):
     df = pd.DataFrame(data)
     df['Date'] = pd.to_datetime(df['Date'])
     data_crypto = df.set_index('Date')
-    data_crypto.to_csv(r'/home/student/Cloud/Owncloud/SyncVM (S2)/cryptotrendanalyzer/data/CoinGecko_Scrap.csv')
+    data_crypto.to_csv('../data/src/coingecko_src.csv', index=False)
+
     print(data_crypto.head())
     print(data_crypto.dtypes)
     print(data_crypto.shape)
@@ -67,6 +71,7 @@ def scrap_coingecko(coin_name,end_date,start_date):
     print('Finally')
     return data_crypto
 
+### TRANSFORM ###
 
 df=scrap_coingecko(coin_name,end_date,start_date)
 
