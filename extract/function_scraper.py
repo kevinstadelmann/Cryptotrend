@@ -36,7 +36,7 @@ def from_name_to_web_ref(popular_coin=True):
     if popular_coin==True:
         return dict_name
 
-    # If popular_coin=False -> scrap all the 112 pages on the web page (NOT RECOMMENDED)
+    # If popular_coin=False -> scrap all the 112 pages on the web page (NOT RECOMMENDED!!!)
     else:
         website_next='https://www.coingecko.com/en?page={}'
         for page in range(2,last_webpage+1):

@@ -83,7 +83,7 @@ def scrap_coingecko(coin_name, end_date, start_date):
     print(data_crypto.dtypes)
     print(data_crypto.shape)
     if count == data_crypto.shape[0]:
-        print('Done!')
+        print('OK!')
     else:
         print('Different number of rows, something happened!')
     return data_crypto
