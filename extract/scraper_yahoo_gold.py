@@ -1,19 +1,30 @@
+####IMPORTS######
+
 import bs4
 import re
-from io import StringIO
 import requests
 from bs4 import BeautifulSoup
 import time
 import datetime
 import pandas as pd
-import csv
-import json
 from selenium import webdriver
 
-### EXTRACT ###
+#################
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0'}
 #################
-Hist_url = 'https://finance.yahoo.com/quote/GCZ21.CMX/history?period1=1514764800&period2=1609459200&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true'
+
+###Defining Ticker, period (Time Frame) & Interval
+
+ticker = 'GC=F'   ##Symbol for Gold
+period1 = int(time.mktime(datetime.datetime(2018, 1, 1, 23, 59).timetuple()))
+period2 = int(time.mktime(datetime.datetime(2021, 11, 1, 23, 59).timetuple()))
+interval = '1d'
+
+###URL From Yahoo Finance - Historical Data
+
+Hist_url = f'https://finance.yahoo.com/quote/{ticker}/history?period1={period1}&period2={period2}&interval={interval}&filter=history&frequency=1d&includeAdjustedClose=true'
+
+###Using Selenium & webdriver to scroll down the page as the website load content dynamically
 
 driver = webdriver.Firefox()
 driver.get(Hist_url)
@@ -29,13 +40,15 @@ driver.maximize_window()
 #Scroll down page till end
 driver.execute_script("window.scrollBy(0,document.body.scrollHeight)")
 
+### Requesting URL & Scraping using BeautifulSoup
+
 r = requests.get(Hist_url, headers=headers)
 
 soup = BeautifulSoup(r.content, 'html.parser')
 
 Hist_table = soup.find('table', class_='W(100%) M(0)')
 
-##print(Hist_table)
+### Scraping the table header
 for header in Hist_table.find_all('thead'):
     t_date = header.find('th', class_= 'Ta(start) W(100px) Fw(400) Py(6px)').text
     t_open = header.find_all('th', class_= 'Fw(400) Py(6px)')[0].text
@@ -47,8 +60,8 @@ for header in Hist_table.find_all('thead'):
     print(t_date, t_open, t_high, t_low, t_close, t_adjclose, t_volume)
 
 
-#def scraping(symbol):
-symbol = 'GCZ21.CMX'
+###Creating empty lists to add the scraped content:
+
 dates=[]
 open_t=[]
 high_t=[]
@@ -56,6 +69,8 @@ low_t=[]
 close_t=[]
 adjclose=[]
 volume_t=[]
+
+###for loop to go through all rows in table & append to the list
 
 for line in Hist_table.find_all('tbody'):
     rows = line.find_all('tr')
@@ -77,7 +92,7 @@ for line in Hist_table.find_all('tbody'):
     data = {'Symbol': symbol, 'Date': dates, 'Open': open_t, 'High': high_t, 'Low': low_t, 'Close': close_t,
                     'Adjusted Close': adjclose, 'Volume': volume_t}
     df = pd.DataFrame(data)
-    print(df)
-    df.to_csv('../data/src/yahoo_gold_src.csv', index=False)
+    saving_csv = '../data/src/yahoo_{}_src.csv'
+    df.to_csv(saving_csv.format(ticker), index=False)           ####using format to add automatically add ticker used in the title
 
 ### TRANSFORM ###
