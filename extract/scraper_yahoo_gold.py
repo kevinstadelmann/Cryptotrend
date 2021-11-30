@@ -8,12 +8,26 @@ import datetime
 import pandas as pd
 import csv
 import json
+from selenium import webdriver
 
 ### EXTRACT ###
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0'}
 #################
 Hist_url = 'https://finance.yahoo.com/quote/GCZ21.CMX/history?period1=1514764800&period2=1609459200&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true'
 
+driver = webdriver.Firefox()
+driver.get(Hist_url)
+driver.maximize_window()
+
+#Scroll down till element is visible
+#start_date=driver.find_element(By.xpath("/html/body/div[1]/div/div/div[1]/div/div[3]/div[1]/div/div[2]/section/div[2]/table/tbody/tr[756]/td[1]/span")p
+#driver.execute_script("arguments[0].scrollIntoView();", start_date)
+
+#Scroll down by pixel
+#driver.execute_script("window.scrollBy(0,5000)","")
+
+#Scroll down page till end
+driver.execute_script("window.scrollBy(0,document.body.scrollHeight)")
 
 r = requests.get(Hist_url, headers=headers)
 
