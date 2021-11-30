@@ -9,7 +9,7 @@ import pandas as pd
 import csv
 import json
 
-
+### EXTRACT ###
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0'}
 #################
 
@@ -66,7 +66,7 @@ for line in Hist_table.find_all('tbody'):
                     'Adjusted Close': adjclose, 'Volume': volume_t}
     df = pd.DataFrame(data)
     print(df)
-    df.to_csv(r'/home/student/Cloud/Owncloud/SyncVM (S2)/cryptotrendanalyzer/data/YahFin_NASDAQ.csv')
+    df.to_csv('../data/src/yahoo_nasdaq_src.csv')
     #saving_csv = r'YahFin_crypto_{}.csv'
     #df.to_csv(saving_csv.format(symbol))
 
@@ -86,3 +86,5 @@ for line in Hist_table.find_all('tbody'):
 
 ##df=pd.DataFrame(data)
 ##df.head()
+
+### TRANSFORM ###

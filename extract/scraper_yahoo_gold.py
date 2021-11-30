@@ -9,7 +9,7 @@ import pandas as pd
 import csv
 import json
 
-
+### EXTRACT ###
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0'}
 #################
 Hist_url = 'https://finance.yahoo.com/quote/GCZ21.CMX/history?period1=1514764800&period2=1609459200&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true'
@@ -64,23 +64,6 @@ for line in Hist_table.find_all('tbody'):
                     'Adjusted Close': adjclose, 'Volume': volume_t}
     df = pd.DataFrame(data)
     print(df)
-    df.to_csv('../data/yahoofinance_gold_srv.csv', index=False)
-    #saving_csv = r'YahFin_crypto_{}.csv'
-    #df.to_csv(saving_csv.format(symbol))
+    df.to_csv('../data/src/yahoo_gold_src.csv', index=False)
 
-
-
-    #return df
-    #df.to_csv(r'YahFin_crypto.csv')
-
-    #return data
-        #print(date, open, high, low, close, adj_close, volume)                          ##stops after 144 rows
-
-#name='Crude Oil'
-#data={'Name':name,'Date':dates,'Open':open_t, 'High':high_t, 'Low':low_t,'Close':close_t, 'Adjusted Close':adjclose, 'Volume':volume_t}
-#print(data)
-
-#%%
-
-##df=pd.DataFrame(data)
-##df.head()
+### TRANSFORM ###

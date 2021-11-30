@@ -74,6 +74,8 @@ pytrends2.build_payload(kw_list2, cat, timeframe='2020-01-01 2020-12-31')
 df1=pytrends1.interest_over_time()
 df2=pytrends2.interest_over_time()
 
+### TRANSFORM ###
+
 #Obtaining the mean value & creating a normalization factor with the common item in both lists (Bitcoin)
 
 averageList1=[]
@@ -107,10 +109,6 @@ print(finalAverageList)
 #    write = csv.writer(f)
 #    for row in finalAverageList:
 #        write.writerow(row)
-
-
-### TRANSFORM ###
-
 
 
 ### LOAD ###
