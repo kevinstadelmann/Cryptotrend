@@ -11,81 +11,87 @@ the program check if this name exist on the webpage and then use its web referen
 The output is a clean dataframe exported as a CSV-file.
 """
 
+### IMPORT ###
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-import matplotlib.pyplot as plt
 from function_scraper import from_name_to_web_ref
-pd.options.display.float_format = '{:.2f}'.format
 
+pd.options.display.float_format = '{:.2f}'.format
 
 ### EXTRACT ###
 
-HEADERS = ({'User-Agent':
-                'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
-                (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36', \
-            'Accept-Language': 'en-US, en;q=0.5'})
+HEADERS = ({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
+                (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36', 'Accept-Language': 'en-US, en;q=0.5'})
 
-coin_name='Bitcoin'
-start_date='2018-01-01'
-end_date='2021-01-01'
 
-def scrap_coingecko(coin_name,end_date,start_date):
-    name_webref=from_name_to_web_ref()
-    #print(name_webref)
-    names, dates, market_cap, volume, open_, close = [],[],[],[],[],[]
-    coin_ref=name_webref[coin_name]
+def scrap_coingecko(coin_name, end_date, start_date):
+    # Use the function from 'function scraper.py' to get the dictionary with the first 100 coin name with their web
+    # reference
+    name_webref = from_name_to_web_ref()
+    coin_ref = name_webref[coin_name]
+
+    # Access the URL with the historical data for the selected coin
     URL_HIST = 'https://www.coingecko.com{}/historical_data/usd?end_date={}&start_date={}#panel'
-    response = requests.get(URL_HIST.format(coin_ref, end_date, start_date),headers=HEADERS)
-    print(response.status_code)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    results = soup.find('table', {'class': 'table-striped'}).find('tbody').find_all('tr')
-    for result in results:
-        date = result.find('th', {'class': 'font-semibold text-center'}).get_text()
+    response_hist = requests.get(URL_HIST.format(coin_ref, end_date, start_date), headers=HEADERS)
+    print('URL Historical Data: ',response_hist.status_code)
+    soup = BeautifulSoup(response_hist.content, 'html.parser')
+
+    # Get the data in the table from the HTML script
+    names, dates, market_cap, volume, open_, close = [], [], [], [], [], []
+    table = soup.find('table', {'class': 'table-striped'})
+    rows = table.find('tbody').find_all('tr')
+    count = 0
+    for row in rows:
+        count += 1
+        date = row.find('th', {'class': 'font-semibold text-center'}).get_text()
         dates.append(date)
-        td = result.find_all('td', {'class': 'text-center'})
+        td = row.find_all('td', {'class': 'text-center'})
         value = []
         for item in td:
             data_str = item.get_text().strip('\n').strip('$').strip(' ').strip('$')
+
+            # Exception: if a N/A value or a number cannot be transform as float (display which number is not a number)
             try:
                 data_float = float(data_str.replace(',', ''))
                 value.append(data_float)
             except:
                 value.append(data_str)
-                print(data_str)
+                print('At row: ', count)
+                print('The value is not a number: ', data_str)
         names.append(coin_name)
         market_cap.append(value[0])
         volume.append(value[1])
         open_.append(value[2])
         close.append(value[3])
-    data = {'Name': names, 'Date': dates, 'Market_Cap': market_cap, 'Volume': volume, 'Open': open_, 'Close': close}
-    df = pd.DataFrame(data)
-    df['Date'] = pd.to_datetime(df['Date'])
-    data_crypto = df.set_index('Date')
+
+    # Create column name from the header in the HTML script
+    lst_head = []
+    header = table.find('thead').find('tr').find_all('th', {'class': 'text-center'})
+    for head in header:
+        lst_head.append(head.get_text())
+
+    # Create a dictionary for all the data with the corresponding header, then transform into a Pandas DataFrame,
+    # then export as a CSV file
+    data = {'Name': names, lst_head[0]: dates, lst_head[1]: market_cap, lst_head[2]: volume, lst_head[3]: open_,
+            lst_head[4]: close}
+    data_crypto = pd.DataFrame(data)
     data_crypto.to_csv('../data/src/coingecko_src.csv', index=False)
 
+    # Checking if the DataFrame is correctly outputted
     print(data_crypto.head())
     print(data_crypto.dtypes)
     print(data_crypto.shape)
-    print('Done!')
-    print('Finally')
+    if count == data_crypto.shape[0]:
+        print('Done!')
+    else:
+        print('Different number of rows, something happened!')
     return data_crypto
 
-### TRANSFORM ###
 
-df=scrap_coingecko(coin_name,end_date,start_date)
+# Selected value
+coin_name = 'Bitcoin'
+start_date = '2018-01-01'
+end_date = '2021-01-01'
 
-time=df.index
-market_cap=df['Market_Cap']
-plt.plot(time, market_cap, label='Market Capitalisation')
-
-plt.xlabel('Time')
-plt.ylabel('Dollar')
-
-plt.title("test plot")
-
-plt.legend()
-
-plt.show(block=True)
-plt.interactive(False)
-plt.show()
+df = scrap_coingecko(coin_name, end_date, start_date)
