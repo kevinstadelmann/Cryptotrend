@@ -10,7 +10,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 ### EXTRACT ###
-df_btc = pd.read_csv('../data/src/twitter_bitcoin_src.csv', header=None)
+df_btc = pd.read_csv('../data/dirty/twitter_bitcoin_dirty.csv', header=None)
 
 ### TRANSFORM ###
 

@@ -32,17 +32,17 @@ cur = conn.cursor()
 
 inputdir = 'deployment'
 
-file_sql = open("sql_deployment.sql", "r")
-var_sql = file_sql.read()
+#file_sql = open("sql_deployment.sql", "r")
+#var_sql = file_sql.read()
 #print(var_sql)
 
 #for line in fileinput.FileInput("file",inplace=1):
 #    if line.rstrip():
 #        print line
 
-for statement in var_sql.split(';'):
+#for statement in var_sql.split(';'):
     #exclude empty lines and comments
-    if statement[0] not in ('#',' '):
-        print(statement[0])
+    #if statement[0] not in ('#',' '):
+    #    print(statement[0])
 #with conn.cursor() as cur:
 #cur.execute(statement)
