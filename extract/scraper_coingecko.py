@@ -92,6 +92,6 @@ def scrap_coingecko(coin_name, end_date, start_date):
 # Selected value
 coin_name = 'Bitcoin'
 start_date = '2018-01-01'
-end_date = '2021-01-01'
+end_date = '2021-11-01'
 
 df = scrap_coingecko(coin_name, end_date, start_date)
