@@ -51,6 +51,10 @@ for i,row in df_btc[1:].iterrows():
         var_count2 = df_btc.loc[i-1, 'count']
         df_btc.at[i,'percent_change'] = (var_count1 / var_count2)-1
 
+    # if not successively, create a new entry with the mean of previous and next entry
+    #else:
+    #    None
+
 # add column asset / source / created_ts
 df_btc['asset'] = "BTC"
 df_btc['source'] = "Twitter"

@@ -1,4 +1,4 @@
-"""A one line summary of the module or program, terminated by a period.
+"""This file handles the loading into the database part of the project
 
 Leave one blank line.  The rest of this docstring should contain an
 overall description of the module or program.  Optionally, it may also
@@ -14,6 +14,7 @@ https://datatofish.com/pandas-dataframe-to-sql/
 # Module Imports
 import mariadb
 import sys
+import pandas
 
 # Connect to MariaDB
 try:
@@ -33,11 +34,13 @@ except mariadb.Error as e:
 # Get Cursor
 cur = conn.cursor()
 
-cur.execute(
-    "SELECT * FROM test")
+cur.execute("SELECT * FROM test")
+
+for index, row in df.iterrows():
+     cursor.execute("INSERT INTO HumanResources.DepartmentTest (DepartmentID,Name,GroupName) values(?,?,?)", row.DepartmentID, row.Name, row.GroupName)
 
 # Print Result-set
-for line in cur:
-    print(line)
+#for line in cur:
+#    print(line)
 
 
