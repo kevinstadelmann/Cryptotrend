@@ -1,6 +1,5 @@
 """
 Let's clean this mess!
-
 """
 
 ### IMPORT ###
@@ -11,8 +10,7 @@ import datetime as dt
 import matplotlib.pyplot as plt
 
 ### EXTRACT ###
-dirty_gecko = pd.read_csv(
-    'C:/Users/natr/Desktop/HSLU_S2/CIP/project/cryptotrendanalyzer/data/dirty/coingecko_dirty_part2.csv')
+dirty_gecko = pd.read_csv('../data/dirty/coingecko_dirty_part2.csv')
 
 ### CLEANING ###
 
@@ -249,6 +247,8 @@ def final_formating_nummeric(df):
                 print(e)
                 print('{}: Not OK!'.format(col))
     return df
+
+
 df_clean=final_formating_nummeric(df_7)
 print(df_clean.dtypes)
 
@@ -266,6 +266,7 @@ def plotting_df(df,lst_numeric_col):
         plt.show(block=True)
         plt.interactive(False)
         plt.show()
+
 
 lst_numeric_col=['market_cap', 'volume', 'open', 'close']
 #plotting_df(df_date_index,lst_numeric_col)
@@ -301,10 +302,5 @@ print('New value min (use previous value): {}\n'.format(prev_value_min))
 
 df_date_index2=df_clean.set_index('date')
 plotting_df(df_date_index2, lst_numeric_col)
-df_date_index2.to_csv('C:/Users/natr/Desktop/HSLU_S2/CIP/project/coingecko_clean.csv')
-
-
-# Enrichment:
-
-
-
+df_date_index2.to_csv('../data/stage/coingecko_clean_2013_2021.csv', index=False)
+print('DONE!')
