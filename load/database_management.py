@@ -14,7 +14,7 @@ https://datatofish.com/pandas-dataframe-to-sql/
 # Module Imports
 import mariadb
 import sys
-import pandas
+import pandas as pd
 
 # Connect to MariaDB
 try:
@@ -23,8 +23,8 @@ try:
         password="123",
         host="127.0.0.1",
         port=3306,
-        database="test",
-        autocommit=True         #automatically commits SQL statements
+        database="cip_project",
+        autocommit=True         #automatically commit SQL statements
 
     )
 except mariadb.Error as e:
@@ -34,13 +34,18 @@ except mariadb.Error as e:
 # Get Cursor
 cur = conn.cursor()
 
-cur.execute("SELECT * FROM test")
+# load data into database
 
-for index, row in df.iterrows():
-     cursor.execute("INSERT INTO HumanResources.DepartmentTest (DepartmentID,Name,GroupName) values(?,?,?)", row.DepartmentID, row.Name, row.GroupName)
+def load_twitter_bitcoin():
+    try:
+        df_tw = pd.read_csv("../data/stage/twitter_bitcoin_stage.csv")
 
-# Print Result-set
-#for line in cur:
-#    print(line)
+        for index, row in df_tw.iterrows():
+            cur.execute("INSERT INTO cip_project.twitter_bitcoin_stage (date,asset,count,percent_change,source,created_ts) VALUES(?,?,?,?,?,?)",
+                        (row.date, row.asset, df_tw.at[index ,'count'], row.percent_change, row.source, row.created_ts))
+
+    except mariadb.Error as e:
+        print(f"Error adding entry to database: {e}")
+
 
 

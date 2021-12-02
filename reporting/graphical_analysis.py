@@ -1,72 +1,54 @@
+"""graphical analysis of the data
+
+Wrap it up and answer questions
+
+"""
 import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import datetime
+#import pandas_profiling as pp
 
-btc = pd.read_csv("BTC.csv")
-twitter = pd.read_csv("twitter.csv")
 
-#print(btc["Date"])
-#print(twitter["Date"])
+### loading and preparing data ###
 
-#plt.plot(twitter["Date"], btc["count"], label="Bitcoin Prize")
-#plt.plot(btc["Date"], btc["Close"], label="Twitter Counts")
-#plt.show()
-#https://www.kdnuggets.com/2020/01/stock-market-forecasting-time-series-analysis.html
-# See Table under: https://www.programiz.com/python-programming/datetime/strptime
-# for more formating options
-str1 = '3/1/2021'
-str2 = '2021-01-03'
-str3 = '1-03-21'
+df_twitter = pd.read_csv('../data/stage/twitter_bitcoin_stage.csv')
+df_google = pd.read_csv('../data/stage/googletrend_bitcoin_stage.csv')
+df_coingecko = pd.read_csv('../data/stage/coingecko_stage_kevin.csv')
 
-date_object1 = datetime.strptime(str1, '%d/%m/%Y')
-date_object2 = datetime.strptime(str2, '%Y-%m-%d')
-date_object3 = datetime.strptime(str3, '%m-%d-%y')
+# select timespan for analysis (2018-2021)
+df_twitter = df_twitter[df_twitter.date.between('2020-02-01', '2021-11-01')]
+#df_google = df_google[df_google.date.between('2020-02-01', '2021-11-01')]
 
-print(date_object1.date())
-print(date_object2.date())
-print(date_object3.date())
+# join data on date
+merge_data = pd.merge(df_twitter[['date','count','percent_change']],
+                      df_google[['date','interest_rate']],
+                      how='inner', on='date')
 
-# code from HosHos
-#graphical presentation
+merge_data = pd.merge(merge_data, df_coingecko[['date', 'close']],
+                      how='inner', on='date')
 
-import numpy as np
-import matplotlib.pyplot as plt
-y_pos=np.arange(len(kw_list))
-plt.barh(y_pos,finalAverageList,align='center',alpha=0.5)
-plt.yticks(y_pos,kw_list)
-plt.xlabel('Average popularity')
+# first graphical analysis
+
+def first_analysis():
+    fig, ax = plt.subplots()
+    ax.plot(merge_data['count'], label='Twitter counts', color='y', linewidth=1.0)
+    ax.plot(merge_data['close'], label='Valuation', color='b', linewidth=1.0)
+    ax.set_xlabel('Time')  # Add an x-label to the axes.
+    ax.set_ylabel('Values')
+    ax.set_title("Simple Plot")
+    ax.legend()
+
+#first_analysis()
 plt.show()
 
-## Notice in the graph we use the more popular keyword for different cryptocurrencies
-## so we use Bitcoin, Doge, Ethereum
+# Question 1
+# Do cryptocurrencies depend on popularity?
+# Correlation + Regression Analysis
 
-kw_list = ["Bitcoin", "Doge", "Ethereum",] # list of keywords to get data
+# Question 2
+# Do people invest in cryptocurrencies in opposition to stock market?
+# Regression Analysis
 
-pytrends.build_payload(kw_list, cat=0, timeframe='2020-01-01 2020-12-31')
-
-#1 Interest over Time
-
-data = pytrends.interest_over_time()
-
-print(data)
-
-data = pytrends.interest_over_time()
-
-data = data.drop(labels=['isPartial'],axis='columns')    #there’s a column named isPartial
-data.to_csv('../data/search_trends.csv')
-
-executionTime = (time.time() - startTime)
-print('Execution time in sec.: ' + str(executionTime))
-
-data = data.reset_index()
-
-import plotly.express as px
-
-fig = px.line(data, x="date", y=['Bitcoin', 'Doge', 'Ethereum'], title='Keyword Web Search Interest Over Time')
-fig.show()
-
-# this method will return historical data of the searched keyword from Google Trend
-# according to the timeframe you have specified
-# we can visualize the data collected by using the Plotly library
-#
+# Question 3
+# What is the future of cryptocurrencies?
+# Logarithmic regression
 
