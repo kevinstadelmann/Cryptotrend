@@ -269,38 +269,41 @@ def plotting_df(df,lst_numeric_col):
 
 
 lst_numeric_col=['market_cap', 'volume', 'open', 'close']
-#plotting_df(df_date_index,lst_numeric_col)
+plotting_df(df_date_index,lst_numeric_col)
 
 # Correct that by hand, because machine are not able (yet!) to evaluate such decision.
-max_market_cap=df_clean['market_cap'].max()
-row_max_market=df_clean.index[df_clean['market_cap'] == max_market_cap].tolist()[0]
-print('Outlier: [market_cap]\nmax: {} (row: {})'.format(max_market_cap,row_max_market))
-prev_value_max=df_clean.at[row_max_market+1,'market_cap']
-df_clean.at[row_max_market,'market_cap']=prev_value_max
-print('New value (use previous value): {}\n'.format(prev_value_max))
+outlier=True
+if outlier==True:
+    max_market_cap=df_clean['market_cap'].max()
+    row_max_market=df_clean.index[df_clean['market_cap'] == max_market_cap].tolist()[0]
+    print('Outlier: [market_cap]\nmax: {} (row: {})'.format(max_market_cap,row_max_market))
+    prev_value_max=df_clean.at[row_max_market+1,'market_cap']
+    df_clean.at[row_max_market,'market_cap']=prev_value_max
+    print('New value (use previous value): {}\n'.format(prev_value_max))
 
-min_open=df_clean['open'].min()
-row_min_open=df_clean.index[df_clean['open'] == min_open].tolist()[0]
-print('Outlier: [open]\nmin: {} (row: {})'.format(min_open,row_min_open))
-prev_value_min=df_clean.at[row_min_open+1,'open']
-df_clean.at[row_min_open,'open']=prev_value_min
-print('New value min (use previous value): {}\n'.format(prev_value_min))
+    min_open=df_clean['open'].min()
+    row_min_open=df_clean.index[df_clean['open'] == min_open].tolist()[0]
+    print('Outlier: [open]\nmin: {} (row: {})'.format(min_open,row_min_open))
+    prev_value_min=df_clean.at[row_min_open+1,'open']
+    df_clean.at[row_min_open,'open']=prev_value_min
+    print('New value min (use previous value): {}\n'.format(prev_value_min))
 
 
-max_close=df_clean['close'].max()
-row_max_close=df_clean.index[df_clean['close'] == max_close].tolist()[0]
-min_close=df_clean['close'].min()
-row_min_close=df_clean.index[df_clean['close'] == min_close].tolist()[0]
-print('Outlier: [close]\nmax: {} (row: {})'.format(max_close,row_max_close,min_close,row_min_close))
-prev_value_max=df_clean.at[row_max_close+1,'close']
-df_clean.at[row_max_close,'close']=prev_value_max
-prev_value_min=df_clean.at[row_min_close+1,'close']
-df_clean.at[row_min_close,'close']=prev_value_min
-print('New value max (use previous value): {}'.format(prev_value_max))
-print('New value min (use previous value): {}\n'.format(prev_value_min))
-
+    max_close=df_clean['close'].max()
+    row_max_close=df_clean.index[df_clean['close'] == max_close].tolist()[0]
+    min_close=df_clean['close'].min()
+    row_min_close=df_clean.index[df_clean['close'] == min_close].tolist()[0]
+    print('Outlier: [close]\nmax: {} (row: {})'.format(max_close,row_max_close,min_close,row_min_close))
+    prev_value_max=df_clean.at[row_max_close+1,'close']
+    df_clean.at[row_max_close,'close']=prev_value_max
+    prev_value_min=df_clean.at[row_min_close+1,'close']
+    df_clean.at[row_min_close,'close']=prev_value_min
+    print('New value max (use previous value): {}'.format(prev_value_max))
+    print('New value min (use previous value): {}\n'.format(prev_value_min))
+else:
+    pass
 
 df_date_index2=df_clean.set_index('date')
 plotting_df(df_date_index2, lst_numeric_col)
-df_date_index2.to_csv('../data/stage/coingecko_clean_2013_2021.csv', index=False)
+df_date_index2.to_csv('../data/stage/coingecko_clean.csv', index=True)
 print('DONE!')
