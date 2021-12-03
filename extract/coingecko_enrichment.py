@@ -26,17 +26,24 @@ def percentage_in_change(df, col_names=('market_cap','volume','open','close')):
             perc=round(((t-t_1)/t_1)*100,3)
             percent_column.insert(0,perc)
         percent_column.append(0)
-        df["%_{}".format(col)] = percent_column
+        index_no = df.columns.get_loc(col)
+        df.insert(index_no+1, '%_{}'.format(col), percent_column)
     return df
 
-gecko_perc=percentage_in_change(gecko_df)
 
-# 2. Time Stamps
-gecko_perc['time_stamps']=datetime.now(tz=None).date()
+gecko_enrich=percentage_in_change(gecko_df)
 
-gecko_perc.set_index('date', inplace=True)
-print(gecko_perc)
 
-#gecko_perc.to_csv(PATH+'coingecko_stage_nathan.csv',index=True)
+# 2. Price Gain/Loss
+price_diff=gecko_df['close']-gecko_df['open']
+gecko_enrich.insert(10,'gain/loss',price_diff)
+
+# 3. Time Stamps
+gecko_enrich['time_stamps']=datetime.now(tz=None).date()
+
+gecko_enrich.set_index('date', inplace=True)
+print(gecko_enrich)
+
+gecko_enrich.to_csv(PATH+'coingecko_stage.csv',index=True)
 print('DONE!')
 
