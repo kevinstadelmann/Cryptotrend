@@ -15,8 +15,7 @@ import string
 import pandas as pd
 
 ### EXTRACT ###
-gecko_data = pd.read_csv('C:/Users/natr/Desktop/HSLU_S2/CIP/project/cryptotrendanalyzer/data/src/coingecko_src.csv',
-                         header=None)
+gecko_data = pd.read_csv('../data/src/coingecko_src.csv', header=0)
 
 ### FUNCTION ###
 lst_character = list(string.ascii_letters+string.punctuation)
@@ -59,5 +58,5 @@ gecko_dirty, dirty_info = make_it_dirty(gecko_data, 30)
 ...
 
 ### EXPORT ###
-gecko_dirty.to_csv('C:/Users/natr/Desktop/HSLU_S2/CIP/project/cryptotrendanalyzer/data/dirty/coingecko_dirty_part1.csv')
-dirty_info.to_csv('C:/Users/natr/Desktop/HSLU_S2/CIP/project/cryptotrendanalyzer/data/dirty/dirty_info_coingecko.csv')
+gecko_dirty.to_csv('..data/dirty/coingecko_1_src_dirty.csv', index=False)
+dirty_info.to_csv('..data/dirty/dirty_info_coingecko.csv', index=False)
