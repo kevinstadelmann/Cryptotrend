@@ -82,4 +82,5 @@ def getStockData(endPeriod, businessDays):
 
 getStockData(end, 1100)  ##reflecting on the number of days - years equivalent (2021-2018)
 
+
 ### TRANSFORM ###
