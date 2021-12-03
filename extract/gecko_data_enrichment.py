@@ -7,9 +7,9 @@ import pandas as pd
 from datetime import datetime
 pd.options.display.float_format = '{:.2f}'.format
 ### EXTRACT ###
-PATH='data/stage/coingecko_clean.csv'
+PATH='../data/stage/'
 abs_path='C:/Users/natr/Desktop/HSLU_S2/CIP/project/cryptotrendanalyzer/data/stage/'
-gecko_df=pd.read_csv(abs_path+'coingecko_clean.csv', header=0)
+gecko_df=pd.read_csv(PATH+'coingecko_clean.csv', header=0)
 
 
 ### ENRICHMENT ###
@@ -37,6 +37,6 @@ gecko_perc['time_stamps']=datetime.now(tz=None).date()
 gecko_perc.set_index('date', inplace=True)
 print(gecko_perc)
 
-gecko_perc.to_csv(abs_path+'coingecko_stage_nathan.csv',index=True)
+#gecko_perc.to_csv(PATH+'coingecko_stage_nathan.csv',index=True)
 print('DONE!')
 
