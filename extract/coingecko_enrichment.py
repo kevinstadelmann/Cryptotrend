@@ -4,6 +4,7 @@ More meaningful data
 
 ### IMPORT ###
 import pandas as pd
+import numpy as np
 from datetime import datetime
 pd.options.display.float_format = '{:.2f}'.format
 ### EXTRACT ###
@@ -37,6 +38,7 @@ gecko_enrich=percentage_in_change(gecko_df)
 # 2. Price Gain/Loss
 price_diff=gecko_df['close']-gecko_df['open']
 gecko_enrich.insert(10,'gain/loss',price_diff)
+gecko_enrich['gain/loss'].round(2)
 
 # 3. Time Stamps
 gecko_enrich['time_stamps']=datetime.now(tz=None).date()
