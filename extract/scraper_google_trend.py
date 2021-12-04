@@ -1,7 +1,14 @@
+""" Google Trend API handler
+
+Google Trend allows daily data for 90days periods. Because data is needed for
+
+"""
+
 import pandas as pd
 from pytrends.request import TrendReq
 import datetime as dt
 import math
+from datetime import timedelta
 
 ### EXTRACT ###
 
@@ -45,13 +52,57 @@ def scrap_googletrends():
 
 ### TRANSFORM ###
 
+# load dirty data
 df_trends = pd.read_csv('../data/dirty/googletrend_bitcoin_dirty.csv')
 
 # remove column isPartial
 df_trends = df_trends.drop(['isPartial'], axis=1)
-# rename column names
+# rename columnes
 df_trends.columns = ['date', 'interest_rate']
+
+# try to format the date
+df_trends['date'] = pd.to_datetime(df_trends['date'], format='%Y-%m-%d', errors='coerce')
+# try to format the interest_rate
+df_trends['interest_rate'] = pd.to_numeric(df_trends['interest_rate'], errors='coerce')
+#if not possible, drop entries
+df_trends = df_trends.dropna()
+
+# sort by date
+df_trends = df_trends.sort_values(by="date", ascending=True)
+
+
+# add percentual change from interest_rate on a daily basis
+# skip first row, because there is no value to compare
+for i,row in df_trends[1:].iterrows():
+
+    dt_day1 = df_trends.loc[i, 'date']
+    dt_day2 = df_trends.loc[i - 1, 'date']
+
+    # exclude rows which are not successively with their date
+    if dt_day1 + timedelta(days=-1) == dt_day2:
+        var_count1 = df_trends.loc[i, 'interest_rate']
+        var_count2 = df_trends.loc[i-1, 'interest_rate']
+        df_trends.at[i,'percent_change'] = (var_count1 / var_count2)-1
+
+    # if not successively, create a new entry with the mean of previous and next entry
+    else:
+        # take the left and right entries, surrounding the missing date
+        idx1 = df_trends['date'].searchsorted(df_trends.loc[i-1, 'date'], side='left')
+        idx2 = df_trends['date'].searchsorted(df_trends.loc[i-1, 'date'], side='right')
+
+        # calculate the missing data
+        var_day = df_trends.loc[idx1, 'date'] + timedelta(days=1)
+        var_interest = (df_trends.loc[idx1, 'interest_rate'] + df_trends.loc[idx2, 'interest_rate']) / 2
+        var_percent_change = (var_interest / df_trends.loc[idx1, 'interest_rate']) - 1
+
+        # add the missing data
+        df_trends = df_trends.append({'date': var_day, 'interest_rate': var_interest, 'percent_change': var_percent_change}, ignore_index=True)
+
+        # order again by date
+        df_trends = df_trends.sort_values(by="date", ascending=True)
+
+        # reset index for additional missing data
+        df_trends.reset_index(drop=True, inplace=True)
 
 # safe cleaned file
 df_trends.to_csv('../data/stage/googletrend_bitcoin_stage.csv', index=None)
-

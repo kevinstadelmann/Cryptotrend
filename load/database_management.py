@@ -34,7 +34,7 @@ except mariadb.Error as e:
 # Get Cursor
 cur = conn.cursor()
 
-# load data into database
+### load data into database ###
 
 def load_twitter_bitcoin():
     try:
