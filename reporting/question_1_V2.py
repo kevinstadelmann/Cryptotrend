@@ -9,6 +9,9 @@ Extracts data out of csv file, transforms it ... blabla
 # Correlation + Regression Analysis
 
 # https://www.askpython.com/python/examples/correlation-regression-analysis
+https://datatofish.com/multiple-linear-regression-python/
+
+# how correlate things are: https://www.youtube.com/watch?v=cxogUULzU9E&list=PLnSVMZC68_e667DFySPQwmsl-tNaVo8ED&index=7
 # heatmap would be nice ;)
 
 import numpy as np

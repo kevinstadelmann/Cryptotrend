@@ -17,6 +17,20 @@ import seaborn as sns
 ### load prepared data
 df_q2 = pd.read_csv('../data/merged/data_question_two.csv')
 
+
+#print(df_q2.corr())
+def correlation_heatmap():
+    sns.heatmap(df_q2.corr())
+    np.triu(np.ones_like(df_q2.corr()))
+
+    plt.figure(figsize=(16, 6))
+    # define the mask to set the values in the upper triangle to True
+    mask = np.triu(np.ones_like(df_q2.corr(), dtype=np.bool))
+    heatmap = sns.heatmap(df_q2.corr(), mask=mask, vmin=-1, vmax=1, annot=True, cmap='BrBG')
+    heatmap.set_title('Triangle Correlation Heatmap', fontdict={'fontsize': 18}, pad=16);
+    plt.show()
+
+correlation_heatmap()
 # prepare data
 ### loading and preparing data ###
 
@@ -37,4 +51,4 @@ def graphical_analysis():
     ax.legend()
     plt.show()
 
-graphical_analysis()
+#graphical_analysis()

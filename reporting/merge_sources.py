@@ -103,7 +103,7 @@ def merge_data_question_three():
     df_q3 = pd.read_csv('../data/stage/coingecko_stage.csv', index_col=False)
 
     # select time period for analysis (2018-2021)
-    df_q3 = df_q3[df_q3.date.between('2020-10-01', '2021-11-01')]
+    #df_q3 = df_q3[df_q3.date.between('2020-10-01', '2021-11-01')]
 
     # remove non-necessary columns
     df_q3 = df_q3.drop(['name', 'time_stamps', '%_market_cap', 'volume', '%_volume', 'open', '%_open'], axis=1)
