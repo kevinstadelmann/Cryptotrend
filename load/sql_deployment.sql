@@ -22,12 +22,17 @@ percent_change DECIMAL(4,2),
 );
 
 CREATE TABLE IF NOT EXISTS coingecko_bitcoin_stage(
-name varchar(50),
 date date NOT NULL,
-market_cap decimal(4,2) NOT NULL,
-percent_change DECIMAL(4,2),
-volume INT,
-open INT,
-close INT
+name varchar(50) NOT NULL,
+market_cap DECIMAL(20,1) NOT NULL,
+%_market_cap DECIMAL(3,3)
+volume DECIMAL(16,1),
+%_volume DECIMAL(4,2),
+open DECIMAL(7,2),
+%_open DECIMAL(3,3),
+close DECIMAL(7,2),
+%_close DECIMAL(3,3),
+gain/loss DECIMAL(6,2),
+created_ts TIMESTAMP
 );
 

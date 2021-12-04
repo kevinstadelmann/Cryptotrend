@@ -47,5 +47,18 @@ def load_twitter_bitcoin():
     except mariadb.Error as e:
         print(f"Error adding entry to database: {e}")
 
+def load_coingecko():
+    try:
+        df_tw = pd.read_csv("../data/stage/coingecko_stage.csv")
+
+        for index, row in df_tw.iterrows():
+            cur.execute("INSERT INTO cip_project.coingecko_bitcoin_stage (date,name,market_cap,%_market_cap,"
+                        "volume,%_volume,open,%_open,close,%_close,gain/loss,created_ts) VALUES(?,?,?,?,?,?)",
+                        (row.date, row.name, row.market_cap, row.%_market_cap, row.volume, row.%_volume
+                         row.open, row.%_open, row.close, row.%_close, row.gain/loss, row.created_ts))
+
+    except mariadb.Error as e:
+        print(f"Error adding entry to database: {e}")
+
 
 
