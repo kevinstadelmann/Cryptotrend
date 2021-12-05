@@ -1,6 +1,7 @@
 """Merging stage data to answer project questions
 
-Every question has its own merged data file.
+Every question has its own data file with the joined data from the
+different stage-files.
 
 """
 
@@ -9,6 +10,8 @@ import pandas as pd
 
 
 ### Question ONE ###
+# Do cryptocurrencies depend on popularity?
+# Correlation + Regression Analysis
 def merge_data_question_one():
 
     # load needed stage files
@@ -17,7 +20,7 @@ def merge_data_question_one():
     df_coingecko = pd.read_csv('../data/stage/coingecko_stage.csv')
 
     # select time period for analysis (2018-2021)
-    df_twitter = df_twitter[df_twitter.date.between('2020-10-01', '2021-10-01')]
+    df_twitter = df_twitter[df_twitter.date.between('2018-10-01', '2021-11-01')]
 
     # rename columns to not have problems with join the different data
     # and to make them more meaningful later on
@@ -30,7 +33,7 @@ def merge_data_question_one():
     df_coingecko.rename(columns={"close": "bitcoin_value"}, inplace=True)
 
     # join data on date and select necessary columns
-    df_q1 = pd.merge(df_q1[['date', 'twitter_count', 'twitter_percent_change']],
+    df_q1 = pd.merge(df_twitter[['date', 'twitter_count', 'twitter_percent_change']],
                           df_google[['date', 'interest_rate', 'interest_percent_change']],
                           how='inner', on='date')
 
@@ -42,11 +45,13 @@ def merge_data_question_one():
     #print(df_question_one)
     # safe to csv
     df_q1.to_csv('../data/merged/data_question_one.csv', index=False)
-#merge_data_question_one()
+merge_data_question_one()
 
 
 
 ### Question TWO ###
+# Do people invest in cryptocurrencies in opposition to stock market?
+# Regression Analysis
 def merge_data_question_two():
 
     # load needed stage files
@@ -97,13 +102,13 @@ def merge_data_question_two():
 #merge_data_question_two()
 
 ### Question THREE ###
+# Question 3
+# What is the future of cryptocurrencies?
+# Logarithmic regression
 
 def merge_data_question_three():
     # load needed stage files
     df_q3 = pd.read_csv('../data/stage/coingecko_stage.csv', index_col=False)
-
-    # select time period for analysis (2018-2021)
-    #df_q3 = df_q3[df_q3.date.between('2020-10-01', '2021-11-01')]
 
     # remove non-necessary columns
     df_q3 = df_q3.drop(['name', 'time_stamps', '%_market_cap', 'volume', '%_volume', 'open', '%_open'], axis=1)
