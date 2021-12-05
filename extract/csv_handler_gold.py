@@ -142,5 +142,6 @@ for i,row in df4_gold[1:].iterrows():
 df4_gold['name'] = "Gold"
 df4_gold['source'] = "Yahoo Finance"
 
+
 ### Save cleaned file
 df4_gold.to_csv('../data/stage/yahoo_GC=F_stage.csv', index=False)
