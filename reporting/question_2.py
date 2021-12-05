@@ -18,21 +18,27 @@ import seaborn as sns
 df_q2 = pd.read_csv('../data/merged/data_question_two.csv')
 
 
-#print(df_q2.corr())
 def correlation_heatmap():
-    sns.heatmap(df_q2.corr())
-    np.triu(np.ones_like(df_q2.corr()))
+
+    df_q2_heat = df_q2
+    df_q2_heat.rename(columns={"bitcoin_value": "bitcoin"}, inplace=True)
+    df_q2_heat.rename(columns={"oil_value": "oil"}, inplace=True)
+    df_q2_heat.rename(columns={"nasdaq_value": "nasdaq"}, inplace=True)
+    df_q2_heat.rename(columns={"gold_value": "value"}, inplace=True)
+
+
+    sns.heatmap(df_q2_heat.corr())
+    np.triu(np.ones_like(df_q2_heat.corr()))
 
     plt.figure(figsize=(16, 6))
     # define the mask to set the values in the upper triangle to True
-    mask = np.triu(np.ones_like(df_q2.corr(), dtype=np.bool))
-    heatmap = sns.heatmap(df_q2.corr(), mask=mask, vmin=-1, vmax=1, annot=True, cmap='BrBG')
-    heatmap.set_title('Triangle Correlation Heatmap', fontdict={'fontsize': 18}, pad=16);
+    mask = np.triu(np.ones_like(df_q2_heat.corr(), dtype=np.bool))
+    heatmap = sns.heatmap(df_q2_heat.corr(), mask=mask, vmin=-1, vmax=1, annot=True, cmap='BrBG')
+    heatmap.set_title('Correlation Heatmap: Bitcoin vs. Oil,NASDAQ,GOLD', fontdict={'fontsize': 15}, pad=16);
     plt.show()
 
 correlation_heatmap()
-# prepare data
-### loading and preparing data ###
+
 
 def graphical_analysis():
     # Method to plot the bitcoin valuation together with the google trend and twitter count data.
@@ -51,4 +57,4 @@ def graphical_analysis():
     ax.legend()
     plt.show()
 
-#graphical_analysis()
+graphical_analysis()
