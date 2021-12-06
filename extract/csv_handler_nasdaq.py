@@ -15,7 +15,7 @@ df = pd.read_csv('../data/dirty/yahoo_^IXIC_dirty.csv', header=None)
 ### TRANSFORM ###
 
 ### Assigning the first row as Column Headers & drop this row
-df1 = df.rename(columns=df_gold.iloc[0])
+df1 = df.rename(columns=df.iloc[0])
 df2 = df1.drop([0], axis=0)
 
 ### Remove values which are not numeric & convert to numeric, if not possible, make nan-value
