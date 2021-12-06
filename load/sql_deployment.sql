@@ -38,8 +38,6 @@ created_ts TIMESTAMP
 
 CREATE TABLE IF NOT EXISTS yahoo_CL=F_stage(
 date date NOT NULL,
-name varchar(50) NOT NULL,
-source varchar(50) NOT NULL,
 open DECIMAL(5,2) NOT NULL,
 high DECIMAL(5,2) NOT NULL,
 low DECIMAL(5,2) NOT NULL,
@@ -47,13 +45,12 @@ close DECIMAL(5,2) NOT NULL,
 adjusted_close DECIMAL(5,2) NOT NULL,
 volume INT,
 percent_change DECIMAL(4,2),
-created_ts TIMESTAMP
+name varchar(50) NOT NULL,
+source varchar(50) NOT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS yahoo_GC=F_stage(
 date date NOT NULL,
-name varchar(50) NOT NULL,
-source varchar(50) NOT NULL,
 open DECIMAL(6,2) NOT NULL,
 high DECIMAL(6,2) NOT NULL,
 low DECIMAL(6,2) NOT NULL,
@@ -61,13 +58,12 @@ close DECIMAL(6,2) NOT NULL,
 adjusted_close DECIMAL(6,2) NOT NULL,
 volume INT,
 percent_change DECIMAL(4,2),
-created_ts TIMESTAMP
+name varchar(50) NOT NULL,
+source varchar(50) NOT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS yahoo_^IXIC_stage(
 date date NOT NULL,
-name varchar(50) NOT NULL,
-source varchar(50) NOT NULL,
 open DECIMAL(7,2) NOT NULL,
 high DECIMAL(7,2) NOT NULL,
 low DECIMAL(7,2) NOT NULL,
@@ -75,5 +71,6 @@ close DECIMAL(7,2) NOT NULL,
 adjusted_close DECIMAL(7,2) NOT NULL,
 volume INT,
 percent_change DECIMAL(4,2),
-created_ts TIMESTAMP
+name varchar(50) NOT NULL,
+source varchar(50) NOT NULL,
 );
