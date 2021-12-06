@@ -38,6 +38,28 @@ def load_coingecko():
                     row.open, row.%_open, row.close, row.%_close, row.gain/loss, row.created_ts))
 
 
+def load_yahoo_gold():
+    df_tw = pd.read_csv("../data/stage/yahoo_GC=F_stage.csv")
+
+    for index, row in df_tw.iterrows():
+        cur.execute("INSERT INTO cip_project.yahoo_GC=F_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
+        (row.date, row.open, row.high, row.low, row.close, row.adjusted_close, row.percent_change, row.name, row.source))
+
+def load_yahoo_oil():
+    df_tw = pd.read_csv("../data/stage/yahoo_CL=F_stage.csv")
+
+    for index, row in df_tw.iterrows():
+        cur.execute("INSERT INTO cip_project.yahoo_CL=F_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
+        (row.date, row.open, row.high, row.low, row.close, row.adjusted_close, row.percent_change, row.name, row.source))
+
+def load_yahoo_nasdaq():
+    df_tw = pd.read_csv("../data/stage/yahoo_^IXIC_stage.csv")
+
+    for index, row in df_tw.iterrows():
+        cur.execute("INSERT INTO cip_project.yahoo_^IXIC_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
+        (row.date, row.open, row.high, row.low, row.close, row.adjusted_close, row.percent_change, row.name, row.source))
+
+
 try:
     # Connect to MariaDB
     conn = mariadb.connect(
