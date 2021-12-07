@@ -10,7 +10,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 ### EXTRACT Dirty CSV File ###
-df = pd.read_csv('../data/dirty/yahoo_^IXIC_dirty.csv', header=None)
+df = pd.read_csv('../data/dirty/yahoo_nasdaq_dirty.csv', header=None)
 
 ### TRANSFORM ###
 
@@ -144,4 +144,4 @@ df4['source'] = "Yahoo Finance"
 
 
 ### Save cleaned file
-df4.to_csv('../data/stage/yahoo_^IXIC_stage.csv', index=False)
+df4.to_csv('../data/stage/yahoo_nasdaq_stage.csv', index=False)

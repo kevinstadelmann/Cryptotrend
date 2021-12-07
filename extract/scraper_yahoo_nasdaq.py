@@ -74,7 +74,7 @@ def getStockData(endPeriod, businessDays):
                     'adjusted_close': adjclose, 'volume': volume_t}
             df = pd.DataFrame(data)
             print(df)
-            saving_csv = '../data/src/yahoo_{}_src.csv'
+            saving_csv = '../data/src/yahoo_nasdaq_src.csv'
             ##using format to add automatically add ticker used in the title
             ##And appending the data with new time frame into the csv file
             df.to_csv(saving_csv.format(ticker), mode='a', header=True, index=False)
