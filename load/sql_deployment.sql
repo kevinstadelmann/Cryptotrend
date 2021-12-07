@@ -18,21 +18,21 @@ created_ts TIMESTAMP
 CREATE TABLE IF NOT EXISTS googletrend_bitcoin_stage(
 date date NOT NULL,
 interest_rate decimal(4,2) NOT NULL,
-percent_change DECIMAL(4,2),
+percent_change DECIMAL(4,2)
 );
 
 CREATE TABLE IF NOT EXISTS coingecko_bitcoin_stage(
 date date NOT NULL,
 name varchar(50) NOT NULL,
 market_cap DECIMAL(20,1) NOT NULL,
-%_market_cap DECIMAL(3,3)
+percent_market_cap DECIMAL(3,3),
 volume DECIMAL(16,1),
-%_volume DECIMAL(4,2),
+percent_volume DECIMAL(4,2),
 open DECIMAL(7,2),
-%_open DECIMAL(3,3),
+percent_open DECIMAL(3,3),
 close DECIMAL(7,2),
-%_close DECIMAL(3,3),
-gain/loss DECIMAL(6,2),
+percent_close DECIMAL(3,3),
+gain_loss DECIMAL(6,2),
 created_ts TIMESTAMP
 );
 
@@ -46,7 +46,7 @@ adjusted_close DECIMAL(5,2) NOT NULL,
 volume INT,
 percent_change DECIMAL(4,2),
 name varchar(50) NOT NULL,
-source varchar(50) NOT NULL,
+source varchar(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS yahoo_gold_stage(
@@ -59,7 +59,7 @@ adjusted_close DECIMAL(6,2) NOT NULL,
 volume INT,
 percent_change DECIMAL(4,2),
 name varchar(50) NOT NULL,
-source varchar(50) NOT NULL,
+source varchar(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS yahoo_nasdaq_stage(
@@ -72,5 +72,5 @@ adjusted_close DECIMAL(7,2) NOT NULL,
 volume INT,
 percent_change DECIMAL(4,2),
 name varchar(50) NOT NULL,
-source varchar(50) NOT NULL,
+source varchar(50) NOT NULL
 );
