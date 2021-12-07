@@ -2,11 +2,10 @@
 
 This function take as input:
     - coin_name: The name of the cryptocurrency you want to analyze
-    - start_date: The starting date of the period you want to analyze
-    - end_date: The ending date of the period you want to analyze
+    - start_date: The starting date of the period you want to analyze (YYYY-MM-DD)
+    - end_date: The ending date of the period you want to analyze (YYYY-MM-DD)
 
-The program goes first on the main page where it scraps all the name of the cryptocurrencies,
-and store the name in a dictionary with the webpage reference. So when the user input coin_name,
+The program, first, use another function 'scraper_function.py'.When the user input coin_name,
 the program check if this name exist on the webpage and then use its web reference to access historical data.
 The output is a clean dataframe exported as a CSV-file.
 """
@@ -25,10 +24,10 @@ HEADERS = ({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \
                 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36', 'Accept-Language': 'en-US, en;q=0.5'})
 
 
-def scrap_coingecko(coin_name, end_date, start_date):
+def scrap_coingecko(coin_name, end_date, start_date,popular_coin=True):
     # Use the function from 'function scraper.py' to get the dictionary with the first 100 coin name with their web
     # reference
-    name_webref = from_name_to_web_ref()
+    name_webref = from_name_to_web_ref(popular_coin)
     coin_ref = name_webref[coin_name]
 
     # Access the URL with the historical data for the selected coin
