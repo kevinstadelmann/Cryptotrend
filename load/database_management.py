@@ -43,7 +43,7 @@ def load_coingecko_src():
             cur.execute("INSERT INTO cip_project.original_coingecko (name, date,market_cap,"
                         "volume,open,close) VALUES(?,?,?,?,?,?)",
                         (row.name, row.date, row.market_cap, row.volume, row.open, row.close))
-        print('Successfully load coingecko_src!')
+        print('Successfully load original_coingecko!')
     except mariadb.Error as e:
         print(f"Error adding entry to database: {e}")
 
