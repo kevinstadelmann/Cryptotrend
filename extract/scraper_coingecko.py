@@ -48,16 +48,8 @@ def scrap_coingecko(coin_name, end_date, start_date,popular_coin=True):
         td = row.find_all('td', {'class': 'text-center'})
         value = []
         for item in td:
-            data_str = item.get_text().strip('\n').strip('$').strip(' ').strip('$')
-
-            # Exception: if a N/A value or a number cannot be transform as float (display which number is not a number)
-            try:
-                data_float = float(data_str.replace(',', ''))
-                value.append(data_float)
-            except:
-                value.append(data_str)
-                print('At row: ', count)
-                print('The value is not a number: ', data_str)
+            data = item.get_text()
+            value.append(data)
         names.append(coin_name)
         market_cap.append(value[0])
         volume.append(value[1])
@@ -72,14 +64,14 @@ def scrap_coingecko(coin_name, end_date, start_date,popular_coin=True):
 
     # Create a dictionary for all the data with the corresponding header, then transform into a Pandas DataFrame,
     # then export as a CSV file
-    data = {'Name': names, lst_head[0]: dates, lst_head[1]: market_cap, lst_head[2]: volume, lst_head[3]: open_,
-            lst_head[4]: close}
+    data = {'name': names, lst_head[0].lower(): dates, lst_head[1].lower(): market_cap, lst_head[2].lower(): volume,
+            lst_head[3].lower(): open_, lst_head[4].lower(): close}
     data_crypto = pd.DataFrame(data)
+    data_crypto=data_crypto.rename(columns={'market cap':'market_cap'})     # minimalistic change for the loading part
     data_crypto.to_csv('../data/src/coingecko_src.csv', index=False)
 
     # Checking if the DataFrame is correctly outputted
     print(data_crypto.head())
-    print(data_crypto.dtypes)
     print(data_crypto.shape)
     if count == data_crypto.shape[0]:
         print('OK!')

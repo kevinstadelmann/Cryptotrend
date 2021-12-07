@@ -10,18 +10,40 @@ import datetime as dt
 import matplotlib.pyplot as plt
 
 ### EXTRACT ###
-dirty_gecko = pd.read_csv('../data/dirty/coingecko_src_dirty.csv', header=0)
+dirty_gecko = pd.read_csv(
+    '/home/student/Cloud/Owncloud/SyncVM_S2/cryptotrendanalyzer/data/dirty/coingecko_src_dirty.csv', header=0)
 
 ### CLEANING ###
 
-## Part 1: Manual correction (visual impurities) ##
+## Part 1: Manual correction (visual impurities, open as a DataFrame in the consule) ##
 print(dirty_gecko.head())
 print(dirty_gecko.shape)
 df_1 = dirty_gecko
-df_1.columns = ['name', 'date', 'market_cap', 'volume', 'open', 'close']
+
+
+# First we need to get rid of the dollar sign, the '\n' and replace the ',', so we can transform the number as float
+def first_cleaning(df):
+    for col in df.columns:
+        row = 0
+        for item in df[col]:
+            try:
+                clean_item = item.strip('\n').strip('$').strip(' ').strip('$').strip('\n')
+                try:
+                    number_item=float(clean_item.replace(',', ''))
+                    df.loc[row,col]=number_item
+                except ValueError:
+                    df.loc[row, col] = clean_item
+            except AttributeError:
+                pass
+            row += 1
+    return df
+
+
+df_2 = first_cleaning(df_1)
 
 
 # First column formatting, numeric, string, date --> Not possible due to impurities
+# This function will be used at the end to confirm that the columns are in the right data type
 def formating_column(df):
     for col in df.columns:
         try:
@@ -36,13 +58,17 @@ def formating_column(df):
                 print(e)
 
 
-formating_column(df_1)
+formating_column(df_2)
 
-print('\n'*2)
+print('\n' * 2)
+
+
 ## Part 2:Impurities detection ##
 # 1. Scroll each row in each column
 # 2. Detect the type of the column (numeric vs string)
 # 3. Detect impurities
+# Input: DataFrame
+# Output: Dictionary with information about 1) column type 2) row impurities 3) impurities
 def detect_impurities_basic(df):
     row_len, col_len = df.shape
     nested_dict = {}
@@ -83,13 +109,17 @@ def detect_impurities_basic(df):
     return nested_dict
 
 
-dict_info = detect_impurities_basic(df_1)
+dict_info = detect_impurities_basic(df_2)
 
-print('\n'*2)
+print('\n' * 2)
+
+
 ## Part 3: Now we notice some character were inserted in numbers. Let's clean that! ##
-# 1. Select only the column with type integer or float
+# 1. Select only the column with type numeric
 # 2. Select only string impurities
 # 3. Apply a cleaning algorithm
+# Input: DataFrame and the dictionary from the function 'detect_impurities_basic()'
+# Output: DataFrame
 def clean_string_impurities(df, nested_dictionary):
     col_num = 0
     for dict in nested_dictionary:
@@ -120,15 +150,20 @@ def clean_string_impurities(df, nested_dictionary):
     return df
 
 
-df_2 = clean_string_impurities(df_1, dict_info)
-print('\n'*2)
+df_3 = clean_string_impurities(df_2, dict_info)
+print('\n' * 2)
 # Check with the function 'detect_column_type_and_impurities()', if we reduced the number of impurities.
 # As we can see, we cleaned all the impurities in the numeric column
-dict_info = detect_impurities_basic(df_2)
+dict_info = detect_impurities_basic(df_3)
 
-print('\n'*2)
+print('\n' * 2)
+
+
 ## Part 4.1: Clean string columns (Apply only to this  dataset)##
+# That will also clean the impurities inserted in the column 'name'
 # 1. Clean column 'Name', apply the same name to the all column to make sure we have the same format
+# Input: DataFrame and coin_name (the one used in 'scraper_coingecko.py')
+# Output: print statement with number of correction made
 def format_coin_name(df, coin_name):
     count = 0
     row_len, col_len = df.shape
@@ -142,11 +177,16 @@ def format_coin_name(df, coin_name):
     return df
 
 
-df_3 = format_coin_name(df_2, 'Bitcoin')
+df_4 = format_coin_name(df_3, 'Bitcoin')
 
-print('\n'*2)
+print('\n' * 2)
+
+
 ## Part 4.2: Format the date column
 # 2. Check date format (so we can see potential typos or different format)
+# Input: DataFrame and the name of the date column (so we can access the column without errors)
+# Output: DataFrame and 2 list (list 1: row number of error with typos, list 2: row number error with
+# exceptions like nan value)
 def check_format_date(df, column_date_name):
     row = 0
     lst_ValueError, lst_exception = [], []
@@ -164,13 +204,15 @@ def check_format_date(df, column_date_name):
     return df, lst_ValueError, lst_exception
 
 
-df_4, ValuesError, exceptions = check_format_date(df_3, 'date')
+df_5, ValuesError, exceptions = check_format_date(df_4, 'date')
 print(ValuesError)
 print(exceptions)
 
 
 # 2.1 Correct typos
 # a. We want the format yyyy-mm-dd. So we need a total of 8 digits and two '-'. Let's rebuilt the date
+# Input: DataFrame, list of typos error (so we can correct the typo at the row indicated in the previous function)
+# Output: DataFrame, list of exceptions (the function couldn't correct for some reasons)
 def correct_date_typo(df, lst_ValueError):
     lst_except = []
     for row in lst_ValueError:
@@ -195,26 +237,31 @@ def correct_date_typo(df, lst_ValueError):
     return df, lst_except
 
 
-df_5, lst_except = correct_date_typo(df_4, ValuesError)
-lst_except.extend(exceptions)
+df_6, lst_except = correct_date_typo(df_5, ValuesError)
+lst_except.extend(exceptions)      # Extend the list of exceptions (with row number) so we can manually correct the date
 print(lst_except)
 for row in lst_except:
-    print('row: {}, date: {}'.format(row, df_5.iloc[row, 1]))
+    print('row: {}, date: {}'.format(row, df_6.iloc[row, 1]))
 
 # 2.2 Manual cleaning, handling different date format
-df_5.iloc[4, 1] = '2021-10-28'
-df_5.iloc[38, 1] = '2021-09-24'
-df_5.iloc[47, 1] = '2021-09-15'
+df_6.iloc[4, 1] = '2021-10-28'
+df_6.iloc[38, 1] = '2021-09-24'
+df_6.iloc[47, 1] = '2021-09-15'
 # Deal manually with the missing date at row 449
-prev_date=df_5.iloc[450, 1]
+# This can be extremely problematic if it's at the end of a month (30 or 31 or 28 in February)
+# There is a way to correct this missing values with pandas.to_datetime() when it is set up as a column index,
+# but I judge that it was not necessary for just one missing date.
+prev_date = df_5.iloc[450, 1]
 print(prev_date)
-df_5.iloc[449,1]='2020-08-09'
+df_6.iloc[449, 1] = '2020-08-09'
 
 # 2.3 Apply same format
-df_5['date'] = pd.to_datetime(df_5['date'], format='%Y-%m-%d', errors='ignore')
+df_6['date'] = pd.to_datetime(df_5['date'], format='%Y-%m-%d', errors='ignore')
 
 
 ## Part 5:Check missing values in the dataset, column per column ##
+# Input: DataFrame
+# Output: list of tuples (index_row, index_column) where missing values are
 def check_missing_values(df):
     col_len = df.shape[1]
     lst_row_col = []
@@ -230,6 +277,8 @@ print(missing_values_position)
 
 
 # 2. Relace missing values
+# Input: DataFrame and list of missining values locations as tuples from the 'check_missing_values()'
+# Output: DataFrame
 def replace_missing_value_by_previous(df, lst_row_col):
     for pos in lst_row_col:
         row_n = pos[0]
@@ -241,15 +290,15 @@ def replace_missing_value_by_previous(df, lst_row_col):
     return df
 
 
-df_6 = replace_missing_value_by_previous(df_5, missing_values_position)
+df_7 = replace_missing_value_by_previous(df_6, missing_values_position)
 
-missing_values_position = check_missing_values(df_6)
+missing_values_position = check_missing_values(df_7)
 print(missing_values_position)
 
 # Remove duplicates
-df_7 = df_6.drop_duplicates()
-before = df_6.shape[0]
-after = df_7.shape[0]
+df_8 = df_7.drop_duplicates()
+before = df_7.shape[0]
+after = df_8.shape[0]
 print('{} duplicates removed!'.format(before - after))
 
 
@@ -267,13 +316,14 @@ def final_formating_nummeric(df):
     return df
 
 
-df_clean = final_formating_nummeric(df_7)
+df_clean = final_formating_nummeric(df_8)
 print(df_clean.dtypes)
 
 df_date_index = df_clean.set_index('date')
 
 
-# Final: Plotting each column to notice any outliner (fake entry)!
+# Final: Plotting each column to notice any outliers (fake entry)!
+# Input: DataFrame, and list of column names where values are numeric
 def plotting_df(df, lst_numeric_col):
     time = df.index
     for col in lst_numeric_col:
@@ -290,7 +340,7 @@ def plotting_df(df, lst_numeric_col):
 lst_numeric_col = ['market_cap', 'volume', 'open', 'close']
 plotting_df(df_date_index, lst_numeric_col)
 
-# Correct that by hand, because machine are not able (yet!) to evaluate such decision.
+# Correct that by hand, because machine are not able (yet!) to decide/quantify if a value is outlier or not.
 outlier = True
 if outlier == True:
     max_market_cap = df_clean['market_cap'].max()

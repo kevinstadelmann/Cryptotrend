@@ -1,8 +1,8 @@
 """
 Insert random character, in random row, in a random column, randomly in a value
 --> 10 impurities for 100 rows --> 1000 rows, around 20 impurities should be enough
-Warnings 1: We INSERT an not delete, because if we delete, there is no way to correct/clean the impurities.
-Warnings 2: We insert LETTERS and SPECIAL CHARACTER. Not numbers because we wouldn't if the modified number
+Warnings 1: We INSERT and not delete, because if we delete, there is no way to correct/clean the impurities.
+Warnings 2: We insert LETTERS and SPECIAL CHARACTER. Not numbers because we wouldn't know if the modified number
 is correct or not.
 
 1098 rows & 6 columns
@@ -15,7 +15,7 @@ import string
 import pandas as pd
 
 ### EXTRACT ###
-gecko_data = pd.read_csv('..src/coingecko_src.csv', header=0)
+gecko_data = pd.read_csv('../src/coingecko_src.csv', header=0)
 
 ### FUNCTION ###
 lst_character = list(string.ascii_letters+string.punctuation)
