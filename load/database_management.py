@@ -16,49 +16,68 @@ import mariadb
 import sys
 import pandas as pd
 
-# Connect to MariaDB
+
+### load data into database ###
+
+def load_twitter_bitcoin():
+    df_tw = pd.read_csv("../data/stage/twitter_bitcoin_stage.csv")
+
+    for index, row in df_tw.iterrows():
+        cur.execute("INSERT INTO cip_project.twitter_bitcoin_stage (date,asset,count,percent_change,source,created_ts) VALUES(?,?,?,?,?,?)",
+        (row.date, row.asset, df_tw.at[index ,'count'], row.percent_change, row.source, row.created_ts))
+
+
+
+def load_coingecko():
+    df_tw = pd.read_csv("../data/stage/coingecko_stage.csv")
+
+    for index, row in df_tw.iterrows():
+        cur.execute("INSERT INTO cip_project.coingecko_bitcoin_stage (date,name,market_cap,%_market_cap,"
+                    "volume,%_volume,open,%_open,close,%_close,gain/loss,created_ts) VALUES(?,?,?,?,?,?)",
+                    (row.date, row.name, row.market_cap, row.%_market_cap, row.volume, row.%_volume
+                    row.open, row.%_open, row.close, row.%_close, row.gain/loss, row.created_ts))
+
+
+def load_yahoo_gold():
+    df_tw = pd.read_csv("../data/stage/yahoo_gold_stage.csv")
+
+    for index, row in df_tw.iterrows():
+        cur.execute("INSERT INTO cip_project.yahoo_gold_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
+        (row.date, row.open, row.high, row.low, row.close, row.adjusted_close, row.percent_change, row.name, row.source))
+
+def load_yahoo_oil():
+    df_tw = pd.read_csv("../data/stage/yahoo_oil_stage.csv")
+
+    for index, row in df_tw.iterrows():
+        cur.execute("INSERT INTO cip_project.yahoo_oil_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
+        (row.date, row.open, row.high, row.low, row.close, row.adjusted_close, row.percent_change, row.name, row.source))
+
+def load_yahoo_nasdaq():
+    df_tw = pd.read_csv("../data/stage/yahoo_nasdaq_stage.csv")
+
+    for index, row in df_tw.iterrows():
+        cur.execute("INSERT INTO cip_project.yahoo_nasdaq_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
+        (row.date, row.open, row.high, row.low, row.close, row.adjusted_close, row.percent_change, row.name, row.source))
+
+
 try:
+    # Connect to MariaDB
     conn = mariadb.connect(
         user="root",
         password="123",
         host="127.0.0.1",
         port=3306,
         database="cip_project",
-        autocommit=True         #automatically commit SQL statements
+        autocommit=True  # automatically commit SQL statements
 
     )
+    # Get Cursor
+    cur = conn.cursor()
+
+    # Load data
+    #load_twitter_bitcoin()
+
+
 except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: {e}")
     sys.exit(1)
-
-# Get Cursor
-cur = conn.cursor()
-
-# load data into database
-
-def load_twitter_bitcoin():
-    try:
-        df_tw = pd.read_csv("../data/stage/twitter_bitcoin_stage.csv")
-
-        for index, row in df_tw.iterrows():
-            cur.execute("INSERT INTO cip_project.twitter_bitcoin_stage (date,asset,count,percent_change,source,created_ts) VALUES(?,?,?,?,?,?)",
-                        (row.date, row.asset, df_tw.at[index ,'count'], row.percent_change, row.source, row.created_ts))
-
-    except mariadb.Error as e:
-        print(f"Error adding entry to database: {e}")
-
-def load_coingecko():
-    try:
-        df_tw = pd.read_csv("../data/stage/coingecko_stage.csv")
-
-        for index, row in df_tw.iterrows():
-            cur.execute("INSERT INTO cip_project.coingecko_bitcoin_stage (date,name,market_cap,%_market_cap,"
-                        "volume,%_volume,open,%_open,close,%_close,gain/loss,created_ts) VALUES(?,?,?,?,?,?)",
-                        (row.date, row.name, row.market_cap, row.%_market_cap, row.volume, row.%_volume
-                         row.open, row.%_open, row.close, row.%_close, row.gain/loss, row.created_ts))
-
-    except mariadb.Error as e:
-        print(f"Error adding entry to database: {e}")
-
-
-

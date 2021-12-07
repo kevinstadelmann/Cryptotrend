@@ -71,10 +71,10 @@ def getStockData(endPeriod, businessDays):
                 volume = row.find_all('td', class_='Py(10px) Pstart(10px)')[5].text
                 volume_t.append(volume)
             data = {'symbol': ticker, 'date': dates, 'open': open_t, 'high': high_t, 'low': low_t, 'close': close_t,
-                    'adjusted Close': adjclose, 'volume': volume_t}
+                    'adjusted_close': adjclose, 'volume': volume_t}
             df = pd.DataFrame(data)
             print(df)
-            saving_csv = '../data/src/yahoo_{}_src.csv'
+            saving_csv = '../data/src/yahoo_gold_src.csv'
             ##using format to add automatically add ticker used in the title
             ##And appending the data with new time frame into the csv file
             df.to_csv(saving_csv.format(ticker), mode='a', header=True, index=False)
