@@ -9,9 +9,7 @@ from datetime import datetime
 
 pd.options.display.float_format = '{:.2f}'.format
 ### EXTRACT ###
-PATH = '../data/stage/'
-abs_path = 'C:/Users/natr/Desktop/HSLU_S2/CIP/project/cryptotrendanalyzer/data/stage/'
-gecko_df = pd.read_csv(PATH + 'coingecko_clean.csv', header=0)
+gecko_df = pd.read_csv('../data/stage/coingecko_clean.csv', header=0)
 
 
 ### ENRICHMENT ###
@@ -49,5 +47,5 @@ gecko_enrich['time_stamps'] = datetime.now(tz=None).date()
 gecko_enrich.set_index('date', inplace=True)
 print(gecko_enrich)
 
-gecko_enrich.to_csv(PATH + 'coingecko_stage.csv', index=True)
+gecko_enrich.to_csv('../data/stage/coingecko_stage.csv', index=True)
 print('DONE')

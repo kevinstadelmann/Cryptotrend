@@ -10,8 +10,7 @@ import datetime as dt
 import matplotlib.pyplot as plt
 
 ### EXTRACT ###
-dirty_gecko = pd.read_csv('/home/student/Cloud/Owncloud/SyncVM (S2)/cryptotrendanalyzer/'
-                          'data/dirty/coingecko_src_dirty.csv', header=0)
+dirty_gecko = pd.read_csv('../data/dirty/coingecko_src_dirty.csv', header=0)
 
 ### CLEANING ###
 
