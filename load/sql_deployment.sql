@@ -36,7 +36,7 @@ gain/loss DECIMAL(6,2),
 created_ts TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS yahoo_CL=F_stage(
+CREATE TABLE IF NOT EXISTS yahoo_oil_stage(
 date date NOT NULL,
 open DECIMAL(5,2) NOT NULL,
 high DECIMAL(5,2) NOT NULL,
@@ -49,7 +49,7 @@ name varchar(50) NOT NULL,
 source varchar(50) NOT NULL,
 );
 
-CREATE TABLE IF NOT EXISTS yahoo_GC=F_stage(
+CREATE TABLE IF NOT EXISTS yahoo_gold_stage(
 date date NOT NULL,
 open DECIMAL(6,2) NOT NULL,
 high DECIMAL(6,2) NOT NULL,
@@ -62,7 +62,7 @@ name varchar(50) NOT NULL,
 source varchar(50) NOT NULL,
 );
 
-CREATE TABLE IF NOT EXISTS yahoo_^IXIC_stage(
+CREATE TABLE IF NOT EXISTS yahoo_nasdaq_stage(
 date date NOT NULL,
 open DECIMAL(7,2) NOT NULL,
 high DECIMAL(7,2) NOT NULL,

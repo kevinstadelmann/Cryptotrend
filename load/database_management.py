@@ -39,24 +39,24 @@ def load_coingecko():
 
 
 def load_yahoo_gold():
-    df_tw = pd.read_csv("../data/stage/yahoo_GC=F_stage.csv")
+    df_tw = pd.read_csv("../data/stage/yahoo_gold_stage.csv")
 
     for index, row in df_tw.iterrows():
-        cur.execute("INSERT INTO cip_project.yahoo_GC=F_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
+        cur.execute("INSERT INTO cip_project.yahoo_gold_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
         (row.date, row.open, row.high, row.low, row.close, row.adjusted_close, row.percent_change, row.name, row.source))
 
 def load_yahoo_oil():
-    df_tw = pd.read_csv("../data/stage/yahoo_CL=F_stage.csv")
+    df_tw = pd.read_csv("../data/stage/yahoo_oil_stage.csv")
 
     for index, row in df_tw.iterrows():
-        cur.execute("INSERT INTO cip_project.yahoo_CL=F_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
+        cur.execute("INSERT INTO cip_project.yahoo_oil_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
         (row.date, row.open, row.high, row.low, row.close, row.adjusted_close, row.percent_change, row.name, row.source))
 
 def load_yahoo_nasdaq():
-    df_tw = pd.read_csv("../data/stage/yahoo_^IXIC_stage.csv")
+    df_tw = pd.read_csv("../data/stage/yahoo_nasdaq_stage.csv")
 
     for index, row in df_tw.iterrows():
-        cur.execute("INSERT INTO cip_project.yahoo_^IXIC_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
+        cur.execute("INSERT INTO cip_project.yahoo_nasdaq_stage (date,open,high,low,close,adjusted_close,percent_change,name,source) VALUES(?,?,?,?,?,?,?,?,?)",
         (row.date, row.open, row.high, row.low, row.close, row.adjusted_close, row.percent_change, row.name, row.source))
 
 
