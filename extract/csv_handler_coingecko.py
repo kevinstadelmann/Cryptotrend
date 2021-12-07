@@ -10,8 +10,7 @@ import datetime as dt
 import matplotlib.pyplot as plt
 
 ### EXTRACT ###
-dirty_gecko = pd.read_csv(
-    '/home/student/Cloud/Owncloud/SyncVM_S2/cryptotrendanalyzer/data/dirty/coingecko_src_dirty.csv', header=0)
+dirty_gecko = pd.read_csv('../data/dirty/coingecko_src_dirty.csv', header=0)
 
 ### CLEANING ###
 
@@ -20,7 +19,7 @@ print(dirty_gecko.head())
 print(dirty_gecko.shape)
 df_1 = dirty_gecko
 
-
+# IGNORE (due to loading source file in mariadb, this function outdated)
 # First we need to get rid of the dollar sign, the '\n' and replace the ',', so we can transform the number as float
 def first_cleaning(df):
     for col in df.columns:
@@ -39,9 +38,7 @@ def first_cleaning(df):
     return df
 
 
-df_2 = first_cleaning(df_1)
-
-
+df_2=df_1
 # First column formatting, numeric, string, date --> Not possible due to impurities
 # This function will be used at the end to confirm that the columns are in the right data type
 def formating_column(df):
@@ -153,9 +150,17 @@ def clean_string_impurities(df, nested_dictionary):
 df_3 = clean_string_impurities(df_2, dict_info)
 print('\n' * 2)
 # Check with the function 'detect_column_type_and_impurities()', if we reduced the number of impurities.
-# As we can see, we cleaned all the impurities in the numeric column
 dict_info = detect_impurities_basic(df_3)
+print('\n' * 2)
 
+# As we can see, there is still one impurity that the function couldn't solve, so we will do it by hand
+# We are lucky on this one because the dots are at the same place, but let say it was 274.9.4 which dot is the right one
+# So by precaution, we will take the previous value.
+prev_value=df_3.iloc[2306,4]
+df_3.iloc[2305,4]=prev_value
+
+dict_info=detect_impurities_basic(df_3)
+# Now we got rid of all the impurities
 print('\n' * 2)
 
 

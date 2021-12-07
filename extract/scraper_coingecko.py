@@ -2,10 +2,11 @@
 
 This function take as input:
     - coin_name: The name of the cryptocurrency you want to analyze
-    - start_date: The starting date of the period you want to analyze (YYYY-MM-DD)
-    - end_date: The ending date of the period you want to analyze (YYYY-MM-DD)
+    - start_date: The starting date of the period you want to analyze
+    - end_date: The ending date of the period you want to analyze
 
-The program, first, use another function 'scraper_function.py'.When the user input coin_name,
+The program goes first on the main page where it scraps all the name of the cryptocurrencies,
+and store the name in a dictionary with the webpage reference. So when the user input coin_name,
 the program check if this name exist on the webpage and then use its web reference to access historical data.
 The output is a clean dataframe exported as a CSV-file.
 """
@@ -47,9 +48,19 @@ def scrap_coingecko(coin_name, end_date, start_date,popular_coin=True):
         dates.append(date)
         td = row.find_all('td', {'class': 'text-center'})
         value = []
+
+        # Cleaning for loading source file to mariadb
         for item in td:
-            data = item.get_text()
-            value.append(data)
+            data_str = item.get_text().strip('\n').strip('$').strip(' ').strip('$')
+
+            # Exception: if a N/A value or a number cannot be transform as float (display which number is not a number)
+            try:
+                data_float = float(data_str.replace(',', ''))
+                value.append(data_float)
+            except:
+                value.append(data_str)
+                print('At row: ', count)
+                print('The value is not a number: ', data_str)
         names.append(coin_name)
         market_cap.append(value[0])
         volume.append(value[1])
@@ -67,7 +78,7 @@ def scrap_coingecko(coin_name, end_date, start_date,popular_coin=True):
     data = {'name': names, lst_head[0].lower(): dates, lst_head[1].lower(): market_cap, lst_head[2].lower(): volume,
             lst_head[3].lower(): open_, lst_head[4].lower(): close}
     data_crypto = pd.DataFrame(data)
-    data_crypto=data_crypto.rename(columns={'market cap':'market_cap'})     # minimalistic change for the loading part
+    data_crypto = data_crypto.rename(columns={'market cap': 'market_cap'})  # minimalistic change for the loading part
     data_crypto.to_csv('../data/src/coingecko_src.csv', index=False)
 
     # Checking if the DataFrame is correctly outputted
@@ -78,7 +89,6 @@ def scrap_coingecko(coin_name, end_date, start_date,popular_coin=True):
     else:
         print('Different number of rows, something happened!')
     return data_crypto
-
 
 # Selected value
 coin_name = 'Bitcoin'
