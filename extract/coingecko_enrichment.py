@@ -50,4 +50,4 @@ gecko_enrich.set_index('date', inplace=True)
 print(gecko_enrich)
 
 gecko_enrich.to_csv(PATH + 'coingecko_stage.csv', index=True)
-print('DONE!')
+print('DONE')
