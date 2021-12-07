@@ -10,7 +10,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 ### EXTRACT Dirty CSV File ###
-df_gold = pd.read_csv('../data/dirty/yahoo_gold_dirty.csv', header=None)
+df_gold = pd.read_csv('../data/dirty/yahoo_gold_src_dirty.csv', header=None)
 
 ### TRANSFORM ###
 
